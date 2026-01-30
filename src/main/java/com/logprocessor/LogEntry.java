@@ -7,7 +7,6 @@ public record LogEntry(
         Instant timestamp,
         LogLevel level,
         String message,
-        String source,
         LogCategory category
 ) { }
 
