@@ -1,13 +1,19 @@
 package com.logprocessor;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
-        LogProcessor processor = new LogProcessor();
+        LogBatchService service = new LogBatchService();
 
-        LogEntry entry = new LogEntry("1", Instant.now(), LogLevel.ERROR, "Timeout", new NetworkError("HTTPS", "10.0.0.0"));
+        List<LogEntry> logs = List.of(
+                new LogEntry(UUID.randomUUID().toString(), Instant.now(), LogLevel.INFO, "User Login", new SecurityAudit("admin", "LOGIN")),
+                new LogEntry(UUID.randomUUID().toString(), Instant.now(), LogLevel.DEBUG, "Fine grain trace", new NetworkError("TCP", "127.0.0.1")),
+                new LogEntry(UUID.randomUUID().toString(), Instant.now(), LogLevel.ERROR, "database down", new DatabaseError("SELECT ... ", 500))
+        );
 
-        processor.process(entry);
+        service.processAll(logs);
     }
 }
